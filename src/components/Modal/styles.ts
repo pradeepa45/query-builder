@@ -22,3 +22,4 @@ export const ModalContent = styled("div")(
     overflow: hidden;
   `
 );
+

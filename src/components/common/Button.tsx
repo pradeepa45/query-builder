@@ -42,7 +42,8 @@ export default function Button({
           ? `bg-transparent border ${
               variant === "primary" ? "border-purple" : "border-grey"
             }`
-          : undefined
+          : undefined,
+          "disabled:bg-slate disabled:cursor-not-allowed disabled:text-grey"
       )}
       disabled={disabled}
     >

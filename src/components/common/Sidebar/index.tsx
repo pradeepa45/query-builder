@@ -9,12 +9,12 @@ export default function Sidebar() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
-    <aside className="basis-56 flex flex-col gap-2 py-20">
+    <aside className="basis-80 flex flex-col gap-2 py-20">
       <div className="flex gap-2 items-center">
         <span>
           <FaFilter size={18} color="white" />
         </span>
-        <p>Build your query</p>
+        <p className="whitespace-nowrap">Build your query</p>
       </div>
       <p className="text-white opacity-40">
         Narrow your search further by adding some filters.

@@ -1,29 +1,52 @@
 import React from "react";
 import { MdClose } from "react-icons/md";
-
-import { ModalContent, Modal as BaseModal } from "./styles";
-import AddNewQuery from "./AddNewQuery";
-import BuildQuery from "./QueryBuilder";
-import queryDisplay from "./QueryDisplay";
+import { RuleGroup } from "../../types"
+import { pushRuleGroup } from "../../api/ruleGroup"
+import queryDisplay from "./QueryDisplay"
+import AddNewQuery from "./AddNewQuery"
+import BuildQuery from "./QueryBuilder"
+import { ModalContent, Modal as BaseModal } from "./styles"
 
 interface ModalProps {
   open: boolean;
   handleClose: () => void;
 }
 
-interface Rule {
-  field: string;
-  value: string;
-  condition: string;
-}
-
 export default function Modal({ open, handleClose }: ModalProps) {
-  const [ruleGroup, setGroup] = React.useState<Rule[]>([]);
+  const [ruleGroup, setGroup] = React.useState<RuleGroup>();
   const [currentScreen, setCurrent] = React.useState(0);
+  const [query, setQuery] = React.useState<string>();
   const [error, setError] = React.useState({
     status: false,
     message: "",
   });
+
+  React.useEffect(() => {
+    if (open) {
+      const fetchNewRuleGroup = async () => {
+        try {
+          const { data } = await pushRuleGroup({
+            children: [],
+            conjunction: "and",
+            not: false,
+          });
+          if (data) {
+            const newGroup = data[0] as unknown as RuleGroup;
+            setGroup(newGroup);
+          }
+        } catch (err) {
+          console.error("Failed to create rule group", err);
+          setError({ status: true, message: "Failed to create rule group" });
+        }
+      };
+
+      fetchNewRuleGroup();
+    }
+  }, [open]);
+
+  React.useEffect(()=>{
+    setQuery(queryDisplay(ruleGroup))
+  },[ruleGroup])
 
   const screens = [
     {
@@ -33,9 +56,12 @@ export default function Modal({ open, handleClose }: ModalProps) {
     {
       title: "Build your query",
       description: (
-        <p className="px-2 text-white bg-purple-hover max-w-screen-sm text-ellipsis">
-          Query: {queryDisplay(ruleGroup)}
-        </p>
+        <span
+          className="px-2 text-white bg-purple-hover max-w-screen-md line-clamp-1 text-ellipsis rounded-sm"
+          title={query}
+        >
+          Query: {query}
+        </span>
       ),
     },
   ];
@@ -47,7 +73,7 @@ export default function Modal({ open, handleClose }: ModalProps) {
         return (
           <AddNewQuery
             handleCloseModal={handleClose}
-            ruleGroup={ruleGroup}
+            ruleGroup={ruleGroup as RuleGroup}
             error={error}
             setGroup={setGroup}
             setError={setError}
@@ -57,17 +83,16 @@ export default function Modal({ open, handleClose }: ModalProps) {
       case 1:
         return (
           <BuildQuery
-            ruleGroup={ruleGroup}
+            ruleGroup={ruleGroup as RuleGroup}
             error={error}
             setGroup={setGroup}
             setError={setError}
             setScreen={setCurrent}
+            handleClose={handleClose}
           />
         );
     }
   };
-
-  React.useEffect(() => {}, [currentScreen]);
 
   return (
     <BaseModal

@@ -24,7 +24,6 @@ export default function Select({
   };
 
   const handleSelect = (option: string) => {
-    console.log(option);
     setSelectedValue(option);
     onChange(name, option);
     setIsOpen(false);

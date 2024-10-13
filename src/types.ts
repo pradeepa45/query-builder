@@ -1,4 +1,5 @@
 export interface Rule {
+  id?: string;
   field?:
     | "Theme"
     | "Sub-theme"
@@ -17,11 +18,13 @@ export interface Rule {
     | "Is"
     | "Is not";
   value?: string;
-  type: "rule";
+  conjunction: "and" | "or";
+  type?: "string" | "number";
 }
+
 export interface RuleGroup {
-  children: (RuleGroup | Rule)[];
-  conjunction: "AND" | "OR";
+  id?: string;
+  children: Rule[];
+  conjunction?: "and" | "or";
   not: boolean;
-  type: "rule_group";
 }

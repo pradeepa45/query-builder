@@ -1,7 +1,7 @@
 import camelCase from "lodash/camelCase";
 import { Rule, RuleGroup } from "../../types";
 
-const conditionToOperator = {
+const conditionToOperator: Record<string, string> = {
   Equals: "==",
   "Does not equal": "!=",
   Like: "LIKE",
@@ -11,7 +11,9 @@ const conditionToOperator = {
   "Is not": "IS NOT",
 };
 
-export default function queryDisplay(ruleGroup: any) {
+export default function queryDisplay(ruleGroup: RuleGroup | undefined): string {
+  if (!ruleGroup) return "";
+
   const processRule = (rule: Rule): string => {
     const operator =
       conditionToOperator[rule.condition as keyof typeof conditionToOperator] ||
@@ -21,21 +23,18 @@ export default function queryDisplay(ruleGroup: any) {
       return `“(field.${camelCase(rule.field)}) ${operator}”`;
     }
 
-    // Format rule as: “(field) operator "value"”
     return `“(field.${camelCase(rule.field)}) ${operator} \\"${rule.value}\\"”`;
   };
 
-  const processGroup = (group: any): string => {
-    const conjunction = group.conjunction === "AND" ? "&&" : "||";
-    const groupQuery = group
-      .map((child: any) =>
-        child.type === "rule_group"
-          ? processGroup(child as RuleGroup)
-          : processRule(child as Rule)
-      )
-      .join(` ${conjunction} `);
+  const processGroup = (group: RuleGroup): string => {
+    if (!group || !group.children) return "";
 
-    return group.not ? `!(${groupQuery})` : `(${groupQuery})`;
+    const groupQueries = group.children.map((child, index) => {
+        if (child) return processRule(child);
+        else return ""; 
+    });
+    const conjunction = group.conjunction === "and" ? " && " : " || ";
+    return `{ ${groupQueries.join(conjunction)} }`;
   };
 
   return processGroup(ruleGroup);
