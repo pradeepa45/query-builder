@@ -1,10 +1,11 @@
 import { HiDownload } from "react-icons/hi";
+
 import Button from "./common/Button";
 import Input from "./form/Input";
 
 export default function SearchBar() {
   return (
-    <div className="grid grid-cols-12 items-center gap-2 pb-4">
+    <div className="lg:grid lg:grid-cols-12 lg:items-center gap-2 pb-4 flex flex-col cursor-wait">
       <Input
         type="search"
         variant="outlined"

@@ -1,10 +1,10 @@
+import React from "react";
+import { clsx } from "clsx";
 import { BaseTextFieldProps } from "@mui/material";
 import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
-import { ChangeEventHandler } from "react";
-import { twMerge } from "tailwind-merge";
 
 interface InputProps extends BaseTextFieldProps {
-  onChange?: ChangeEventHandler<HTMLTextAreaElement>;
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
   className?: string;
   value?: string;
 }
@@ -26,7 +26,7 @@ export default function Input({
       required={required}
       disabled={disabled}
       placeholder={placeholder}
-      className={twMerge(
+      className={clsx(
         className,
         "h-[44px] py-[9px] outline-none border rounded-md resize-none bg-black px-4"
       )}

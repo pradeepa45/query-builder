@@ -1,4 +1,4 @@
-import { css, styled } from "@mui/material";
+import { styled } from "@mui/material";
 import { Modal as BaseModal } from "@mui/base";
 
 export const Modal = styled(BaseModal)`
@@ -10,16 +10,11 @@ export const Modal = styled(BaseModal)`
   justify-content: center;
 `;
 
-export const ModalContent = styled("div")(
-  ({ theme }) => css`
-    font-family: "IBM Plex Sans", sans-serif;
-    font-weight: 500;
-    text-align: start;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    overflow: hidden;
-  `
-);
-
+export const ModalContent = styled("div")`
+  text-align: start;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+`;

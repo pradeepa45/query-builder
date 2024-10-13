@@ -1,11 +1,11 @@
 import React from "react";
 import { TbPlus } from "react-icons/tb";
-import { twMerge } from "tailwind-merge";
+import { clsx } from "clsx";
 
 import { Rule, RuleGroup } from "../../../types";
 import Button from "../../common/Button";
 import { pushRuleGroup, updateRuleGroup } from "../../../api/ruleGroup";
-import RuleComponent from "./FilterComponent"
+import RuleComponent from "./FilterComponent";
 
 interface Props {
   ruleGroup: RuleGroup;
@@ -18,8 +18,6 @@ interface Props {
   setScreen: React.Dispatch<React.SetStateAction<number>>;
   handleClose: () => void;
 }
-
-
 
 export default function BuildQuery({
   ruleGroup,
@@ -42,7 +40,10 @@ export default function BuildQuery({
     setGroup({ ...ruleGroup, children: updatedRules });
   };
 
-  const handleConjunctionChange = async (alignment: "and" | "or", index: number) => {
+  const handleConjunctionChange = async (
+    alignment: "and" | "or",
+    index: number
+  ) => {
     const updatedRules = [...ruleGroup.children];
     updatedRules[index] = { ...updatedRules[index], conjunction: alignment };
     setGroup({ ...ruleGroup, children: updatedRules });
@@ -56,21 +57,22 @@ export default function BuildQuery({
         },
         ruleGroup.id
       );
-    
       if (data) setGroup(data[0]);
       if (error) setError(error);
     }
   };
-  
+
   const handleNewOption = () => {
     setGroup({
       ...ruleGroup,
-      children: [
-        ...ruleGroup.children,
-        { ...rule, conjunction: "and" }, 
-      ],
+      children: [...ruleGroup.children, { ...rule, conjunction: "and" }],
     });
-    setRule({ field: "" as Rule["field"], condition: "" as Rule["condition"], value: "", conjunction: "and" });
+    setRule({
+      field: "" as Rule["field"],
+      condition: "" as Rule["condition"],
+      value: "",
+      conjunction: "and",
+    });
   };
 
   const handleDelete = (index: number) => {
@@ -105,9 +107,10 @@ export default function BuildQuery({
   return (
     <div className="py-10 px-6">
       <div
-        className={twMerge(
+        className={clsx(
           "bg-slate p-4 text-white flex flex-col gap-4 max-h-96",
-          ruleGroup?.children?.length > 2 && "overflow-y-scroll"
+          ruleGroup?.children?.length > 2 && "lg:overflow-y-scroll",
+          ruleGroup?.children?.length > 1 && "overflow-y-scroll"
         )}
       >
         {ruleGroup?.children?.map((rule, id) => (

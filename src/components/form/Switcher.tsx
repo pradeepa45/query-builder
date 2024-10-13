@@ -1,8 +1,11 @@
 import React from "react";
 
-export default function ToggleButtons({alignment, onToggle}:{
-  alignment: 'and' | 'or',
-  onToggle: (alignment: 'and' | 'or') => void
+export default function ToggleButtons({
+  alignment,
+  onToggle,
+}: {
+  alignment: "and" | "or";
+  onToggle: (alignment: "and" | "or") => void;
 }) {
   const [activeButton, setActiveButton] = React.useState(alignment);
 

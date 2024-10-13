@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { IconButton, Tooltip } from "@mui/material";
-import { FaCircleQuestion } from "react-icons/fa6";
 
 import Button from "../common/Button";
 import Select from "../form/Select";
@@ -32,8 +30,8 @@ const AddNewQuery: React.FC<Props> = ({
   setScreen,
 }) => {
   const [rule, setRule] = useState<Rule>({
-    field: "" as Rule['field'],
-    condition: "" as Rule['condition'],
+    field: "" as Rule["field"],
+    condition: "" as Rule["condition"],
     value: "",
     conjunction: "and",
   });
@@ -42,13 +40,6 @@ const AddNewQuery: React.FC<Props> = ({
     setRule((prev) => ({
       ...prev,
       [name]: option,
-    }));
-  };
-
-  const handleCheckbox = () => {
-    setRule((prev) => ({
-      ...prev,
-      type: prev.type === "string" ? "number" : "string",
     }));
   };
 
@@ -69,7 +60,10 @@ const AddNewQuery: React.FC<Props> = ({
           ...ruleGroup,
           children: [newRuleData[0] as Rule],
         };
-        const { data: updatedGroupData } = await updateRuleGroup(updatedGroup, ruleGroup.id as string);
+        const { data: updatedGroupData } = await updateRuleGroup(
+          updatedGroup,
+          ruleGroup.id as string
+        );
         if (updatedGroupData) {
           setGroup(updatedGroupData[0] as RuleGroup);
           setScreen(1);
@@ -86,19 +80,20 @@ const AddNewQuery: React.FC<Props> = ({
   return (
     <div>
       <div className="bg-slate my-10 px-6 flex items-center justify-center gap-2 mx-6">
-        <div className="grid grid-cols-3 p-4 gap-4 text-white justify-between grow">
+        <div className="lg:grid lg:grid-cols-3 p-4 lg:gap-4 text-white justify-between grow flex flex-col gap-2">
           {fields.map((item) => (
-            <SelectField
+            <Select
               key={item.name}
               label={`Select ${item.name}`}
               name={item.name}
               options={item.options}
               value={rule[item.name as keyof Rule]}
-              handleSelect={handleSelect}
+              onChange={(name, selectedOption) =>
+                handleSelect(name, selectedOption)
+              }
             />
           ))}
         </div>
-        
       </div>
 
       {error?.status && (
@@ -126,24 +121,3 @@ const AddNewQuery: React.FC<Props> = ({
 };
 
 export default AddNewQuery;
-
-// Extracted Select Field Component
-interface SelectFieldProps {
-  label: string;
-  name: string;
-  options: string[];
-  value?: string;
-  handleSelect: (name: string, option: string) => void;
-}
-
-const SelectField: React.FC<SelectFieldProps> = ({ label, name, options, value, handleSelect }) => {
-  return (
-    <Select
-      label={label}
-      name={name}
-      options={options}
-      value={value}
-      onChange={(name,selectedOption) => handleSelect(name, selectedOption)}
-    />
-  );
-};

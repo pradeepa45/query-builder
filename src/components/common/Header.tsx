@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { twMerge } from "tailwind-merge";
+import { clsx } from "clsx";
+
 import Logo from "./Logo";
 import Avatar from "./Avatar";
 
@@ -13,15 +14,15 @@ interface HeaderListItem {
 export default function Header({ list }: { list: HeaderListItem[] }) {
   const [active] = useState(0);
   return (
-    <nav className="flex gap-20 h-[72px] items-center mx-20 bg-grey bg-opacity-5">
+    <nav className="flex gap-20 h-[72px] items-center lg:mx-20 bg-grey bg-opacity-5 justify-between mx-4">
       <Logo />
-      <div className="flex gap-4 grow">
+      <div className="gap-4 grow md:flex hidden">
         {list.map((item) => (
           <a
             href={item.url}
             key={item.name}
             id={item.id}
-            className={twMerge(
+            className={clsx(
               "flex gap-2 py-1.5 px-2 hover:bg-grey hover:bg-opacity-10 rounded-3xl items-center justify-center",
               active === list.indexOf(item)
                 ? "bg-white bg-opacity-5 text-white"

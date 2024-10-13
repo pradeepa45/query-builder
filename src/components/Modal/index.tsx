@@ -1,11 +1,12 @@
 import React from "react";
 import { MdClose } from "react-icons/md";
-import { RuleGroup } from "../../types"
-import { pushRuleGroup } from "../../api/ruleGroup"
-import queryDisplay from "./QueryDisplay"
-import AddNewQuery from "./AddNewQuery"
-import BuildQuery from "./QueryBuilder"
-import { ModalContent, Modal as BaseModal } from "./styles"
+
+import { RuleGroup } from "../../types";
+import { pushRuleGroup } from "../../api/ruleGroup";
+import queryDisplay from "./QueryDisplay";
+import AddNewQuery from "./AddNewQuery";
+import BuildQuery from "./QueryBuilder";
+import { ModalContent, Modal as BaseModal } from "./styles";
 
 interface ModalProps {
   open: boolean;
@@ -44,9 +45,9 @@ export default function Modal({ open, handleClose }: ModalProps) {
     }
   }, [open]);
 
-  React.useEffect(()=>{
-    setQuery(queryDisplay(ruleGroup))
-  },[ruleGroup])
+  React.useEffect(() => {
+    setQuery(queryDisplay(ruleGroup));
+  }, [ruleGroup]);
 
   const screens = [
     {
@@ -95,12 +96,7 @@ export default function Modal({ open, handleClose }: ModalProps) {
   };
 
   return (
-    <BaseModal
-      aria-labelledby="unstyled-modal-title"
-      aria-describedby="unstyled-modal-description"
-      open={open}
-      onClose={handleClose}
-    >
+    <BaseModal open={open} onClose={handleClose}>
       <ModalContent
         sx={{ width: 960, height: 700 }}
         className="bg-black border border-grey relative rounded"
@@ -112,13 +108,10 @@ export default function Modal({ open, handleClose }: ModalProps) {
           <MdClose size={16} color="white" />
         </button>
         <div className="mb-2 py-6 px-4 bg-purple">
-          <h2
-            id="unstyled-modal-title"
-            className="m-0 leading-6 text-white text-lg mb-2"
-          >
+          <h2 className="m-0 leading-6 text-white md:text-lg mb-2 text-base">
             {screens[currentScreen].title}
           </h2>
-          <p id="unstyled-modal-description" className="m-0 text-purple-light">
+          <p className="m-0 text-purple-light md:text-base text-sm">
             {screens[currentScreen].description}
           </p>
         </div>

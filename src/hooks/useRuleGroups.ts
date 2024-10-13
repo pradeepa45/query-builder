@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
+
 import { fetchRuleGroup, deleteRuleGroup } from '../api/ruleGroup';
 import { RuleGroup } from '../types';
 import { supabase } from '../utils/supabase';
 
 export const useRuleGroups = (itemsPerPage: number) => {
-  const [rules, setRules] = useState<RuleGroup[] | undefined>();
-  const [error, setError] = useState<string | undefined>();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [rules, setRules] = React.useState<RuleGroup[] | undefined>();
+  const [error, setError] = React.useState<string | undefined>();
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [totalPages, setTotalPages] = React.useState(1);
 
-  const getRules = async (page: number) => {
+  const getRules = React.useCallback(async (page: number) => {
     const start = (page - 1) * itemsPerPage;
     const end = start + itemsPerPage - 1;
     try {
@@ -22,7 +23,11 @@ export const useRuleGroups = (itemsPerPage: number) => {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch rule groups');
     }
-  };
+  },[itemsPerPage]);
+
+  React.useEffect(() => {
+    getRules(currentPage);
+  }, [currentPage, getRules]);
 
   const handleDelete = async (id?: string) => {
     if(!id) return
@@ -32,7 +37,7 @@ export const useRuleGroups = (itemsPerPage: number) => {
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     const subscription = supabase
       .channel('public:ruleGroup')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'ruleGroup' }, (payload) => {
@@ -54,10 +59,6 @@ export const useRuleGroups = (itemsPerPage: number) => {
       subscription.unsubscribe();
     };
   }, []);
-
-  useEffect(() => {
-    getRules(currentPage);
-  }, [currentPage]);
 
   return {
     rules,

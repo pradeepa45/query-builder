@@ -1,15 +1,15 @@
 import React from "react";
 import { FaFilter } from "react-icons/fa";
 
-import Button from "../Button";
-import Modal from "../../Modal";
+import Button from "../common/Button";
+import Modal from "../Modal";
 
 export default function Sidebar() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (
-    <aside className="basis-80 flex flex-col gap-2 py-20">
+    <div className="lg:basis-80 flex flex-col gap-2 lg:py-20">
       <div className="flex gap-2 items-center">
         <span>
           <FaFilter size={18} color="white" />
@@ -28,6 +28,6 @@ export default function Sidebar() {
         Build query
       </Button>
       <Modal open={open} handleClose={handleClose} />
-    </aside>
+    </div>
   );
 }
